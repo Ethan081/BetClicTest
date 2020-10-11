@@ -25,6 +25,6 @@ Regression testing is a type of change-related testing to detect whether defects
 
 #### 5-List two CI tools and give their usefulness and a specificity.
 
-	 Jenkins is an populaire open-source continuous integration tool and free. Jenkins federating a large community and more than 1000 plugins are available. Finally, as a tool developed with Java, it can be ported to all major software platforms. Jenkins is allowing integration with most development, testing and deployment tools.
+Jenkins is an populaire open-source continuous integration tool and free. Jenkins federating a large community and more than 1000 plugins are available. Finally, as a tool developed with Java, it can be ported to all major software platforms. Jenkins is allowing integration with most development, testing and deployment tools.
 
-	Circle CI is a flexible CI tool that runs in any environment like cross-platform mobile app, Python API server or Docker cluster. This tool reduces bugs and improves the quality of the application.You can integrate CircleCI with GitHub and can be installed locally or used in the cloud.
+Circle CI is a flexible CI tool that runs in any environment like cross-platform mobile app, Python API server or Docker cluster. This tool reduces bugs and improves the quality of the application.You can integrate CircleCI with GitHub and can be installed locally or used in the cloud.
