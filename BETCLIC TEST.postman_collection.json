@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "ef0d103b-9f22-48a8-99e9-0d85e748a502",
+		"name": "BETCLIC TEST",
+		"description": "BetClic recrutment Test\n\nGo on sports and select the first football competition, now you have access to all matches related to this competition. (If it’s not available, you can choose another competition) \n\n1 - Check for all the matches in this list the following information.\n2 - Check the odds are the same between the listing page (overview) and detail page. \n3 - Retrieve name and ID of all matches from listing competition page. \n4 - Retrieve market name : « Resultat du match » of all matches from listing competition page. \n5 - Check in the detail page, the competition, the competitors and the number of markets.\n",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "detailPage",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "853d88df-1c66-4dcc-aeaa-e624f434b28e",
+						"exec": [
+							"",
+							"const responseJson = pm.response.json();",
+							"var nameTeam01 = pm.environment.get('nameTeam01');",
+							"var oddsTeam01 = pm.environment.get('oddsTeam01');",
+							"var nameTeam02 = pm.environment.get('nameTeam02');",
+							"var oddsTeam02 = pm.environment.get('oddsTeam02');",
+							"var competition_name = pm.environment.get('competition_name');",
+							"var markets_id = pm.environment.get('markets_id');",
+							"",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"//Compare Odds Team between listing page and detail page.",
+							"pm.test(nameTeam01 + \" odds Value\", function (){",
+							"    pm.expect(responseJson.markets[0].selections[0].odds).to.eql(oddsTeam01);",
+							"})",
+							"pm.test(nameTeam02 + \" odds Value\", function (){",
+							"    pm.expect(responseJson.markets[0].selections[2].odds).to.eql(oddsTeam02);   ",
+							"})",
+							"",
+							"//Check Competition name.",
+							"pm.test(\"Check Competition name is \" + competition_name , function (){",
+							"",
+							"    pm.expect(responseJson.competition.name).to.eql(competition_name);",
+							"})",
+							"",
+							"//Check Competitors Name",
+							"pm.test(\"Check Competitors Name \" + nameTeam01 + \" VS \" + nameTeam02 , function (){",
+							"    pm.expect(responseJson.markets[0].selections[0].name).to.eql(nameTeam01);",
+							"    pm.expect(responseJson.markets[0].selections[2].name).to.eql(nameTeam02);",
+							"})",
+							"",
+							"//Check Markets Number",
+							"pm.test(\"Check Markets Number\", function (){",
+							"    pm.expect(responseJson.markets[0].id).to.eql(markets_id);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://offer.cdn.begmedia.com/api/pub/v4/events/{{match_id}}?application=1&countrycode=fr&language=fr&sitecode=frfr",
+					"protocol": "https",
+					"host": [
+						"offer",
+						"cdn",
+						"begmedia",
+						"com"
+					],
+					"path": [
+						"api",
+						"pub",
+						"v4",
+						"events",
+						"{{match_id}}"
+					],
+					"query": [
+						{
+							"key": "application",
+							"value": "1"
+						},
+						{
+							"key": "countrycode",
+							"value": "fr"
+						},
+						{
+							"key": "language",
+							"value": "fr"
+						},
+						{
+							"key": "sitecode",
+							"value": "frfr"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Check the odds are the same between the listing page(overview) and detail page. "
+			},
+			"response": []
+		},
+		{
+			"name": "homePage",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4d5779d9-0d48-46ca-9c74-fe89bfa88b2b",
+						"exec": [
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"//Retrieve match Id.",
+							"pm.environment.set('match_id' , responseJson.unifiedEvents[0].id);",
+							"",
+							"//Retrieve match Name.",
+							"pm.environment.set('match_name' , responseJson.unifiedEvents[0].name);",
+							"",
+							"//Retrieve number of markets.",
+							"pm.environment.set('markets_id' , responseJson.unifiedEvents[0].markets[0].id);",
+							"",
+							"//Retrieve competition Id.",
+							"pm.environment.set('competition_id' , responseJson.id);",
+							"",
+							"//Retrieve competition Name.",
+							"pm.environment.set('competition_name' , responseJson.name);",
+							"",
+							"//listing page  Team odds",
+							"pm.environment.set('oddsTeam01' , responseJson.unifiedEvents[0].markets[0].selections[0].odds);",
+							"pm.environment.set('oddsTeam02' , responseJson.unifiedEvents[0].markets[0].selections[2].odds);",
+							"",
+							"//listing page  Team names",
+							"pm.environment.set('nameTeam01' , responseJson.unifiedEvents[0].markets[0].selections[0].name);",
+							"pm.environment.set('nameTeam02' , responseJson.unifiedEvents[0].markets[0].selections[2].name);",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"//Print retrive name ID of all matches and marcket name",
+							"for( let i = 0; i < responseJson.unifiedEvents.length; i++){",
+							"    console.log(responseJson.unifiedEvents[i].id);",
+							"    console.log(responseJson.unifiedEvents[i].name);",
+							"    console.log(responseJson.unifiedEvents[i].markets[0].name);  ",
+							"}",
+							"",
+							"",
+							"",
+							"//Competition Id Json file",
+							"var listMatchId = [];",
+							"for( let i = 0; i < responseJson.unifiedEvents.length; i++){",
+							"     listMatchId.push(responseJson.unifiedEvents[i].id); ",
+							"}",
+							"",
+							"console.log(JSON.stringify(listMatchId));",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d7d0c4d0-5022-4b4e-b99c-9a0cc65e84f3",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "javascript"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://offer.cdn.begmedia.com/api/pub/v2/competitions/22676?application=1&countrycode=fr&language=fr&sitecode=frfr",
+					"protocol": "https",
+					"host": [
+						"offer",
+						"cdn",
+						"begmedia",
+						"com"
+					],
+					"path": [
+						"api",
+						"pub",
+						"v2",
+						"competitions",
+						"22676"
+					],
+					"query": [
+						{
+							"key": "application",
+							"value": "1"
+						},
+						{
+							"key": "countrycode",
+							"value": "fr"
+						},
+						{
+							"key": "language",
+							"value": "fr"
+						},
+						{
+							"key": "sitecode",
+							"value": "frfr"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
